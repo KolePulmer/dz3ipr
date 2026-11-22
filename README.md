@@ -38,7 +38,7 @@ curl -i http://localhost:8080/healthz   # 200
 curl -i http://localhost:8080/readyz    # теперь 503
 ```
 
-**Теперь пытаемся увеличить каунтер, но ловим ==🔴503==:** 
+**Теперь пытаемся увеличить каунтер, но ловим 🔴503:** 
 ```bash
 curl -i -X POST http://localhost:8080/increment
 ```
@@ -89,3 +89,6 @@ curl -X POST http://localhost:8081/increment # каунтер++
 docker logs thecounter                       # смотрим логи
 docker rm -f thecounter          # теперь можно остановить и удалить контейнер
 ```
+
+## Отчёт
+Результаты проверок — в [REPORT.md](REPORT.md).
