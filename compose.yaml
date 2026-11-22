@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    ports: ["${HOST_PORT}:8000"]
+    environment: { GREETING: "${GREETING}", STORAGE: redis, REDIS_URL: "redis://redis:6379/0" }
+    depends_on:
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import http.client as h;\
+              c=h.HTTPConnection('127.0.0.1',8000,timeout=2);\
+              c.request('GET','/readyz');\
+              assert c.getresponse().status == 200"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  redis:
+    image: redis:8-trixie
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  redis-data:
